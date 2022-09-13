@@ -5,7 +5,7 @@ name: on_push
 
 on:
   push:
-    branch:
+  branch:
       - "**" # This will run on all branches, and must be quoted to be handled by yaml
 
 # What jobs to execute
@@ -14,7 +14,16 @@ jobs:
 
   buid_and_test:
     runs-on: ubuntu-latest
+    env:
+      RUNNER_OS: true
+      HEADLESS_CHROME: true
 
     steps:
       - uses: actions/checkout@v2
-# What steps within each jobs
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: 13
+      - name: Run tests with maven
+        working-directory: webdriver_java
+        run: mvn test
